@@ -35,6 +35,7 @@ localhost:3000
 ```shell
 # only for the very first time
 docker-compose up -d
+
 # re-build and run
 docker-compose build
 docker-compose up -d

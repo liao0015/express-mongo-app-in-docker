@@ -2,6 +2,7 @@ version: "3"
 services:
   myapp:
     container_name: express-mongo-app
+    image: my-express-app:1.0
     restart: always
     build: ./
     ports:

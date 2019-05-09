@@ -4,6 +4,7 @@ const app = require('express')();
 
 // connect to Mongo daemon
 
+// local connection
 // launch local `mongod --dbpath "D:\mongodb\data"` first
 // will create a 'db' named 'express-mongo'
 // localhost url, without default port 27017 will work just fine
@@ -11,6 +12,8 @@ const dbRoute_local = 'mongodb://localhost:27017/express-mongo';
 
 // docker url
 // doesn't require local installation of mongo
+// 'mymongo' is defined inside docker-compose.yml as the service name
+// 'express-mongo' is the 'db' name
 const dbRoute_docker = 'mongodb://mymongo:27017/express-mongo';
 
 mongoose.connect(
