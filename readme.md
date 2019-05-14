@@ -2,7 +2,7 @@
 
 A simple project to experiment with docker
 
-## level 2 image
+## level 2 image (volume included)
 
 
 
@@ -33,6 +33,7 @@ With multiple containers launched separately, they need to be part of the same `
 - require Dockerfile to build the 'express app' image
 - 'mongodb' image will be pulled from docker hub repo
 - you will need to run mongo container first, as the express app depends on it
+- make sure update url to mongodb inside 'index.js'
 
 ```shell
 # create a network

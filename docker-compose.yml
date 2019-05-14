@@ -2,17 +2,15 @@ version: "3"
 services:
   myapp:
     container_name: foo-express-app
-    image: express-app:1.0
+    image: express-app:1.0.0
     restart: always
     build: ./
     ports:
       - "80:3000"
-    volumes:
-      - .:/app
     depends_on:
       - mymongo
   mymongo:
     container_name: foo-mongo-db
-    image: mongo
+    image: mongo:latest
     ports:
       - "27017:27017"
