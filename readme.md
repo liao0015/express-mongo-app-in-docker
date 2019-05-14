@@ -4,7 +4,18 @@ A simple project to experiment with docker
 
 ## level 2 image (volume included)
 
+Without `volume`, everytime you make changes to your 'index.js', you will have to
 
+- stop running container
+- remove the stopped container
+- `docker build` again
+- `docker run` new container based on the update image
+
+Note: you can chain the above commands `docker stop my-container && docker rm my-container && docker build -t new-image . && docker run -d -p 80:3000 --name my-container new-image`
+
+With `volume`
+
+https://dev.to/azure/docker-from-the-beginning---part-ii-5g8n
 
 ## Base image (1.0.0)
 
