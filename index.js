@@ -15,9 +15,11 @@ const dbRoute_local = 'mongodb://localhost:27017/express-mongo';
 // 'mymongo' is defined inside docker-compose.yml as the service name
 // 'express-mongo' is the 'db' name
 const dbRoute_docker = 'mongodb://mymongo:27017/express-mongo';
+// using dockerfile
+const dbRoute_dockerfile = 'mongodb://foo-mongo-db:27017/express-mongo';
 
 mongoose.connect(
-    dbRoute_docker,
+    dbRoute_dockerfile,
     {useNewUrlParser: true}
 ).then(()=>console.log('Connected to MongoDB'))
 .catch(err=>console.log(err));
