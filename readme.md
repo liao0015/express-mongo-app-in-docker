@@ -2,21 +2,6 @@
 
 A simple project to experiment with docker
 
-## level 2 image (volume included)
-
-Without `volume`, everytime you make changes to your 'index.js', you will have to
-
-- stop running container
-- remove the stopped container
-- `docker build` again
-- `docker run` new container based on the update image
-
-Note: you can chain the above commands `docker stop my-container && docker rm my-container && docker build -t new-image . && docker run -d -p 80:3000 --name my-container new-image`
-
-With `volume`
-
-https://dev.to/azure/docker-from-the-beginning---part-ii-5g8n
-
 ## Base image (1.0.0)
 
 Base image includes only an 'express app' and 'mongodb'.  The application can be built run, and tested in the following ways.
@@ -35,7 +20,7 @@ yarn start
 localhost:3000
 ```
 
-### Docker version
+### Docker version (without volume)
 
 There will be two separate docker containers: one for express app and another for monogodb.  We are manually building and running each docker container and link them together.
 
@@ -86,6 +71,32 @@ docker run -dit --name foo-mongo-db --network foo-net -p 27017:27017 mongo:lates
 mongo $(docker-machine ip):27017
 # or
 mongo 192.168.99.100:27017
+```
+
+### Docker version (volume included)
+
+Without `volume`, everytime you make changes to your 'index.js', you will have to
+
+- stop running container
+- remove the stopped container
+- `docker build` again
+- `docker run` new container based on the update image
+
+Note: you can chain the above commands `docker stop my-container && docker rm my-container && docker build -t new-image . && docker run -d -p 80:3000 --name my-container new-image`
+
+With `volume`: you can either create a volume and mount to your container, or mount a subdirectory or your whole application to the container as a volume
+
+Note: if you made changes to your Dockerfile, you will need to re-build the image
+
+```shell
+  # create a volume
+  docker volume create my-volume
+  # run a container and attach the created volume
+  docker run -d -p 8000:3000 --name my-container --volume my-volume:/logs node-app
+  # say you have a '/logs' dir in you appliation, and you want to mount it to your container
+  docker run -d -p 8000:3000 --name my-container --volume $(pwd)/logs:/logs node-app
+  # to mount the whole application in '/app' dir inside the container
+  docker run -d -p 8000:3000 --name my-container --volume $(pwd):/app node-app
 ```
 
 ## `docker-compose` version
