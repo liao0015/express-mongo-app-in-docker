@@ -2,6 +2,8 @@ FROM node:10
 
 WORKDIR /app
 
+ENV PORT=3000
+
 # COPY package.json .
 
 # RUN yarn install
@@ -16,6 +18,6 @@ COPY . .
 # RUN yarn install
 # COPY . .
 
-EXPOSE 3000
+EXPOSE ${PORT}
 
 CMD [ "yarn", "start" ]

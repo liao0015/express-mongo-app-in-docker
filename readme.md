@@ -6,6 +6,42 @@ A simple project to experiment with docker
 
 Base image includes only an 'express app' and 'mongodb'.  The application can be built run, and tested in the following ways.
 
+### `docker-compose` version (recommended)
+
+- require docker installation
+- requrie Dockerfile
+- requrie docker-compose.yml
+- make sure you switch `dbRoute` from `dockercompose`!
+
+```shell
+# only for the very first time
+docker-compose up -d
+
+# re-build and run
+docker-compose build
+docker-compose up -d
+
+# access through browser at port 80
+192.168.99.100
+
+# access the running express app container from host
+docker exec -it express-app-container-foo /bin/sh
+#access the running mongodb container from host
+docker exec -it mongo-db-container-foo /bin/sh
+# access mongodb collections from host
+mongo 192.168.99.100:27017
+
+# stop and remove containers
+docker-compose down
+```
+
+features avilable
+
+- persistent data
+- for persistent database use `mongodump` & `mongorestore` with docker volume
+- applicant binding to container (so that live updates available for node/express app)
+- dedicated network
+
 ### Local version (without docker)
 
 - requrie local installation of MongoDB
@@ -99,28 +135,45 @@ Note: if you made changes to your Dockerfile, you will need to re-build the imag
   docker run -d -p 8000:3000 --name my-container --volume $(pwd):/app node-app
 ```
 
-## `docker-compose` version
+```shell
+  # create a volume and run a mongo cotnainer by attaching the volume to its /var/lib/data
+  docker volume create foo-mongo
+  docker run -d --name foo-mongo --volume foo-mongo:/var/lib/data mongo
+  # let's make a file in /var/lib/data
+  docker exec -it foo-mongo /bin/bash
+  touch /var/lib/data/file.txt
+  echo "hello world" var/lib/data/file.txt
 
-- require docker installation
-- requrie Dockerfile
-- requrie docker-compose.yml
-- make sure you switch `dbRoute` from local to docker!
+  # bring down the container
+  docker stop foo-mongo
+  docker rm foo-mongo
+
+  # re-launch another container
+  docker run -d --name foo-moon --volume foo-mongo:/var/lib/data mongo
+  # check the file
+  docker exec -it foo-moon /bin/bash
+  cat /var/lib/data/file.txt
+
+  # you will see "hello world"
+  # the data persisted
+```
+
+Bonus: How to persist data in mongodb database
 
 ```shell
-# only for the very first time
-docker-compose up -d
+# say, we are in foo-moon as shown above
+# mongodump will save all data in any dir you define
+mongodump --out /var/lib/data/dump
 
-# re-build and run
-docker-compose build
-docker-compose up -d
+# to restore the data from /dump dir
+mongorestore /var/lib/data/dump
 
-# access through browser at port 80
-192.168.99.100
-
-# access the running express app container from host
-docker exec -it express-mongo-app /bin/sh
-#access the running mongodb container from host
-docker exec -it mymongo-db /bin/sh
-# access mongodb collections from host
-mongo 192.168.99.100:27017
+# now you have restored the data from /dump folder
 ```
+
+More bonus:
+
+- compress the dump `tar -cvzf dump.tar.gz /var/lib/data/dump`
+- uncompress the tar file `tar -xvzf dump.tar.gz`
+- download the dump `scp -r root@IP:/var/lib/data/dump ./backup`
+- upload the dump `scp -r ./backup root@IP:/var/lib/data/dump`

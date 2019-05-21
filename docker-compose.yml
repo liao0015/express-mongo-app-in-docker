@@ -1,16 +1,32 @@
-version: "3"
+version: "3.6"
 services:
-  myapp:
-    container_name: foo-express-app
+  express-app-service:
+    container_name: express-app-container-foo
     image: express-app:1.0.0
     restart: always
     build: ./
     ports:
       - "80:3000"
+    networks:
+      - express-mongo-net
+    volumes:
+      - type: bind
+        source: ./
+        target: /app
     depends_on:
-      - mymongo
-  mymongo:
-    container_name: foo-mongo-db
+      - mongo-db-service
+  mongo-db-service:
+    container_name: mongo-db-container-foo
     image: mongo:latest
+    restart: always
     ports:
       - "27017:27017"
+    networks:
+      - express-mongo-net
+    volumes:
+      - db-volume:/var/lib/data
+volumes:
+  data-volume:
+  db-volume:
+networks:
+  express-mongo-net:
