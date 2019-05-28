@@ -6,7 +6,7 @@ services:
     restart: always
     build: ./
     ports:
-      - "80:3000"
+      - "82:3000"
     networks:
       - express-mongo-net
     volumes:
@@ -15,6 +15,9 @@ services:
         target: /app
     depends_on:
       - mongo-db-service
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
   mongo-db-service:
     container_name: mongo-db-container-foo
     image: mongo:latest

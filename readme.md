@@ -2,6 +2,20 @@
 
 A simple project to experiment with docker
 
+## hot-reloading
+
+You will probably encouter issues with `nodemon` not responding to changes, even you have properly 'bind' you app with your container (especially when you are working with windows and using docker-machine & virtualbox).  Well, you can either try `--legacy-watch` or set up `CHOKIDAR` in your `env` as such:
+
+```docker-compose.yml
+services:
+  myservice:
+      environment:
+        CHOKIDAR_USEPOLLING: 'true'
+        CHOKIDAR_INTERVAL: 300
+```
+
+[Not restarting on changes with latest docker-machine](https://github.com/remy/nodemon/issues/722)
+
 ## Base image (1.0.0)
 
 Base image includes only an 'express app' and 'mongodb'.  The application can be built run, and tested in the following ways.

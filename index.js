@@ -59,4 +59,4 @@ app.post('/item/add', (req, res)=>{
 });
 
 const port = 3000;
-app.listen(port, ()=> console.log(`servering running at port: ${port}`));
+app.listen(port, ()=> console.log(`Servering running at port: ${port}`));
